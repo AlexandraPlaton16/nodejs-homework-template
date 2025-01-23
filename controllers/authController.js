@@ -1,9 +1,9 @@
-const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 const sendGridMail = require("@sendgrid/mail");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../config/config");
+
 const { sendVerificationEmail } = require("../utils/sendGrid");
 
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate verification token
-    const verificationToken = nanoid();
+    const verificationToken = uuidv4();
 
     // Create new user with hashed password and verification token
     const newUser = new User({
